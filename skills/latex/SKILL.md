@@ -1,4 +1,5 @@
 ---
+name: latex
 description: >
   Create professional LaTeX documents — CVs, academic reports, presentations (Beamer),
   and manage BibTeX references. Use this skill whenever the user asks to create, edit,
