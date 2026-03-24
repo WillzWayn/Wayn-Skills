@@ -7,9 +7,14 @@
   },
   "plugins": [
     {
-      "source": "plugins/latex",
+      "name": "latex-skills",
+      "source": "./",
       "description": "Skills for creating LaTeX documents: CVs, presentations, articles",
       "category": "document",
+      "strict": false,
+      "skills": [
+        "./skills/latex"
+      ],
       "tags": ["latex", "pdf", "document", "cv", "presentation"]
     }
   ]

@@ -1,31 +1,23 @@
-# willz-skills
+# Wayn-Skills
 
 Personal Claude Code Skills marketplace.
-Published at `github.com/willzwayn/skills`.
+Published at `github.com/WillzWayn/Wayn-Skills`.
 
 ---
 
 ## Repository structure
 
 ```
-willz-skills/
+Wayn-Skills/
 ├── .claude-plugin/
-│   └── marketplace.json        ← index of all plugins
-├── plugins/
-│   ├── _template/              ← copy this to create a new plugin
-│   │   ├── .claude-plugin/
-│   │   │   └── plugin.json
-│   │   └── skills/
-│   │       └── my-skill/
-│   │           └── SKILL.md
-│   └── latex/                  ← example plugin (LaTeX)
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       └── skills/
-│           ├── presentation/
-│           │   └── SKILL.md
-│           └── cv/
-│               └── SKILL.md
+│   └── marketplace.json        ← index of all plugins and skills
+├── skills/
+│   └── latex/                  ← LaTeX document skills
+│       ├── SKILL.md
+│       ├── cv.md
+│       ├── presentation.md
+│       ├── academic-report.md
+│       └── bibtex.md
 └── README.md
 ```
 
@@ -33,103 +25,75 @@ willz-skills/
 
 ## How to use (installation)
 
-### 1. Add the marketplace to Claude Code
+### 1. Install the plugin in Claude Code
 
 ```bash
-/plugin marketplace add willzwayn/skills
+/install-plugin WillzWayn/Wayn-Skills
 ```
 
-### 2. Install a specific plugin
+### 2. Invoke a skill
 
 ```bash
-/plugin install latex@willzwayn-skills
+/latex-skills:latex
 ```
 
-### 3. Invoke a skill
+### 3. Update the plugin
 
 ```bash
-/latex:cv
-/latex:presentation
-```
-
-### 4. Update plugins
-
-```bash
-/plugin update latex@willzwayn-skills
+/update-plugin WillzWayn/Wayn-Skills
 ```
 
 ---
 
-## How to create a new plugin (step by step)
+## How to create a new skill (step by step)
 
-### Step 1 — Copy the template
+### Step 1 — Create the skill folder
 
 ```bash
-cp -r plugins/_template plugins/my-new-plugin
+mkdir -p skills/my-new-skill
 ```
 
-### Step 2 — Edit the `plugin.json`
+### Step 2 — Write the `SKILL.md`
 
-Open `plugins/my-new-plugin/.claude-plugin/plugin.json` and fill in:
-- `name`: unique identifier (kebab-case, e.g.: `latex`, `python-tools`)
-- `description`: what the plugin does
-- `version`: start at `"1.0.0"`
-
-### Step 3 — Create the skills
-
-Inside `plugins/my-new-plugin/skills/`, each folder becomes a skill:
-
-```
-skills/
-└── my-skill/             ← name of the /slash-command
-    ├── SKILL.md          ← required
-    ├── examples.md       ← optional: usage examples
-    ├── reference.md      ← optional: detailed docs
-    └── templates/        ← optional: template files
-        └── template.txt
-```
-
-### Step 4 — Write the `SKILL.md`
-
-See the template at `plugins/_template/skills/my-skill/SKILL.md`.
+Create `skills/my-new-skill/SKILL.md` with frontmatter and instructions.
 
 Important rules:
+
 - `description` is the most critical field — Claude uses it to decide when to automatically invoke the skill
 - Be specific: mention real use cases and keywords the user would use
 - Keep `SKILL.md` under 500 lines; move detailed docs to `reference.md`
 
-### Step 5 — Register in the marketplace
+### Step 3 — Register in the marketplace
 
-Open `.claude-plugin/marketplace.json` and add an entry to the `plugins` array:
+Open `.claude-plugin/marketplace.json` and either add the skill path to an existing plugin's `skills` array, or create a new plugin entry:
 
 ```json
 {
-  "source": "plugins/my-new-plugin",
+  "name": "my-plugin",
+  "source": "./",
   "description": "Short plugin description",
-  "category": "development"
+  "strict": false,
+  "skills": [
+    "./skills/my-new-skill"
+  ]
 }
 ```
 
-### Step 6 — Test locally
+### Step 4 — Test locally
 
 ```bash
-claude --plugin-dir ./plugins/my-new-plugin
+npx skills add . --list
 ```
 
-Inside Claude Code:
-```bash
-/my-new-plugin:my-skill
-```
-
-### Step 7 — Commit and push
+### Step 5 — Commit and push
 
 ```bash
 git add .
-git commit -m "feat: add my-new-plugin"
+git commit -m "feat: add my-new-skill"
 git push
 ```
 
-Done. Anyone can install with `/plugin marketplace add willzwayn/skills`.
+Done. Anyone can install with `/install-plugin WillzWayn/Wayn-Skills`.
 
 ---
 

@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What is this repository
 
-Personal Claude Code Skills library by willzwayn, published as a marketplace at `github.com/willzwayn/skills`. It works simultaneously as:
+Personal Claude Code Skills library by willzwayn, published as a marketplace at `github.com/WillzWayn/Wayn-Skills`. It works simultaneously as:
 
-- **Claude Code Plugin Marketplace** — installable via `/plugin marketplace add willzwayn/skills`
-- **skills.sh directory** — installable via `npx skills add willzwayn/skills`
+- **Claude Code Plugin Marketplace** — installable via `/install-plugin WillzWayn/Wayn-Skills`
+- **skills.sh directory** — installable via `npx skills add WillzWayn/Wayn-Skills`
 
 The `SKILL.md` format follows the open standard [agentskills.io](https://agentskills.io), compatible with Claude Code, Cursor, Gemini CLI, OpenAI Codex CLI, and other agents.
 
@@ -16,20 +16,16 @@ The `SKILL.md` format follows the open standard [agentskills.io](https://agentsk
 ## Structure and conventions
 
 ```
-willz-skills/
+Wayn-Skills/
 ├── .claude-plugin/
-│   └── marketplace.json        ← global index of all plugins
-├── plugins/
-│   ├── _template/              ← canonical template for new plugins
-│   └── <category>/             ← one plugin per category (e.g.: latex, python-tools)
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       └── skills/
-│           └── <skill-name>/   ← one folder per skill
-│               ├── SKILL.md    ← required
-│               ├── examples.md ← optional
-│               ├── reference.md← optional (long docs go here, not in SKILL.md)
-│               └── templates/  ← optional (files used by the skill)
+│   └── marketplace.json        ← global index of all plugins and skills
+├── skills/
+│   └── <skill-name>/           ← one folder per skill
+│       ├── SKILL.md            ← required
+│       ├── examples.md         ← optional
+│       ├── reference.md        ← optional (long docs go here, not in SKILL.md)
+│       └── templates/          ← optional (files used by the skill)
+└── README.md
 ```
 
 **Naming rule**: everything in `kebab-case`. The skill folder name becomes the `/slash-command` within the plugin namespace: `/<plugin>:<skill>`.
@@ -38,34 +34,33 @@ willz-skills/
 
 ## How to add a new skill
 
-### 1. New plugin (new category)
+### 1. Create the skill folder
 
 ```bash
-cp -r plugins/_template plugins/<new-category>
+mkdir -p skills/<skill-name>
 ```
 
-Edit `plugins/<new-category>/.claude-plugin/plugin.json`:
-- `name`: kebab-case, becomes the namespace (`/name:skill`)
-- `description`: what the plugin offers
-- `version`: semver, starts at `"1.0.0"`
+### 2. Write the `SKILL.md`
 
-Register in `.claude-plugin/marketplace.json` by adding to the `plugins` array:
+Create `skills/<skill-name>/SKILL.md` with the appropriate frontmatter and instructions.
+
+### 3. Register in the marketplace
+
+Open `.claude-plugin/marketplace.json` and add the skill path to the appropriate plugin's `skills` array:
+
 ```json
 {
-  "source": "plugins/<new-category>",
+  "name": "my-plugin",
+  "source": "./",
   "description": "Short description",
-  "category": "<category>",
-  "tags": ["tag1", "tag2"]
+  "strict": false,
+  "skills": [
+    "./skills/<skill-name>"
+  ]
 }
 ```
 
-### 2. New skill within an existing plugin
-
-```bash
-mkdir -p plugins/<category>/skills/<skill-name>
-```
-
-Create `SKILL.md` based on `plugins/_template/skills/my-skill/SKILL.md`.
+Or create a new plugin entry if it belongs to a new category.
 
 ---
 
@@ -85,6 +80,7 @@ agent: Explore                   # optional: subagent type (with context: fork)
 ```
 
 **Quality rules:**
+
 - `description` is the most important field — without it, the skill will never be auto-invoked
 - Keep `SKILL.md` under 500 lines — move long docs to `reference.md`
 - Use `disable-model-invocation: true` for skills with side effects (deploy, email, etc.)
@@ -96,9 +92,6 @@ agent: Explore                   # optional: subagent type (with context: fork)
 ## Test locally before publishing
 
 ```bash
-# Test an isolated plugin
-claude --plugin-dir ./plugins/<plugin-name>
-
 # Check which skills skills.sh detects
 npx skills add . --list
 
@@ -112,27 +105,27 @@ npx skills add . --list
 
 ```bash
 git add .
-git commit -m "feat(<category>): add <skill-name>"
+git commit -m "feat: add <skill-name>"
 git push
 ```
 
 After pushing, available for installation:
+
 ```bash
 # Claude Code
-/plugin marketplace add willzwayn/skills
-/plugin install <category>@willzwayn-skills
+/install-plugin WillzWayn/Wayn-Skills
 
 # skills.sh / any compatible agent
-npx skills add willzwayn/skills
+npx skills add WillzWayn/Wayn-Skills
 ```
 
 ---
 
-## Existing categories
+## Existing skills
 
 | Plugin | Skills | Description |
 |--------|--------|-------------|
-| `latex` | `cv`, `presentation` | Professional LaTeX documents |
+| `latex-skills` | `latex` | Professional LaTeX documents (CVs, presentations, academic reports, BibTeX) |
 
 ---
 
