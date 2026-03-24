@@ -126,6 +126,7 @@ npx skills add WillzWayn/Wayn-Skills
 | Plugin | Skills | Description |
 |--------|--------|-------------|
 | `latex-skills` | `latex` | Professional LaTeX documents (CVs, presentations, academic reports, BibTeX) |
+| `writing-skills` | `my-academic-writing` | Replicates William Wayn's personal academic writing voice and argumentation style |
 
 ---
 
