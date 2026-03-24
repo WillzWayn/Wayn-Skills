@@ -16,6 +16,17 @@
         "./skills/latex"
       ],
       "tags": ["latex", "pdf", "document", "cv", "presentation"]
+    },
+    {
+      "name": "writing-skills",
+      "source": "./",
+      "description": "Academic writing style replication — writes in William Wayn's personal voice",
+      "category": "writing",
+      "strict": false,
+      "skills": [
+        "./skills/my-academic-writing"
+      ],
+      "tags": ["writing", "academic", "style", "voice", "dissertation", "paper"]
     }
   ]
 }
