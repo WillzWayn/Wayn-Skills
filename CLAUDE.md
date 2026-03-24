@@ -68,7 +68,7 @@ Or create a new plugin entry if it belongs to a new category.
 
 ```yaml
 ---
-name: skill-name              # optional: if omitted, uses the folder name
+name: skill-name              # REQUIRED for skills.sh compatibility
 description: >                # CRITICAL — Claude uses this to auto-invoke
   What the skill does and when to use it. Be specific, mention keywords
   the user would naturally use.
@@ -133,7 +133,7 @@ npx skills add WillzWayn/Wayn-Skills
 
 | Field | Required | Effect |
 |-------|----------|--------|
-| `name` | no | display name and slash-command (default: folder name) |
+| `name` | **yes** | display name and slash-command — required for `npx skills` compatibility |
 | `description` | recommended | Claude uses this to auto-invoke |
 | `disable-model-invocation` | no | `true` = only user invokes |
 | `user-invocable` | no | `false` = only Claude invokes (background knowledge) |

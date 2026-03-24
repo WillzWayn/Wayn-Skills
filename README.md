@@ -59,7 +59,8 @@ Create `skills/my-new-skill/SKILL.md` with frontmatter and instructions.
 
 Important rules:
 
-- `description` is the most critical field — Claude uses it to decide when to automatically invoke the skill
+- `name` and `description` are **required** in the frontmatter — without both, `npx skills add` won't detect the skill
+- `description` is what Claude uses to decide when to automatically invoke the skill
 - Be specific: mention real use cases and keywords the user would use
 - Keep `SKILL.md` under 500 lines; move detailed docs to `reference.md`
 
