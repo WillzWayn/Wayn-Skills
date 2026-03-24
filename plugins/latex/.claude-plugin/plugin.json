@@ -1,6 +1,6 @@
 {
   "name": "latex",
-  "description": "Skills para criar documentos LaTeX profissionais: CV, apresentações, relatórios acadêmicos, e gerenciamento de referências BibTeX",
+  "description": "Skills for creating professional LaTeX documents: CVs, presentations, academic reports, and BibTeX reference management",
   "version": "1.0.0",
   "author": {
     "name": "willzwayn",

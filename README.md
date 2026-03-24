@@ -1,24 +1,24 @@
 # willz-skills
 
-Marketplace pessoal de Claude Code Skills.
-Publicado em `github.com/willzwayn/skills`.
+Personal Claude Code Skills marketplace.
+Published at `github.com/willzwayn/skills`.
 
 ---
 
-## Estrutura do repositório
+## Repository structure
 
 ```
 willz-skills/
 ├── .claude-plugin/
-│   └── marketplace.json        ← índice de todos os plugins
+│   └── marketplace.json        ← index of all plugins
 ├── plugins/
-│   ├── _template/              ← copie este para criar um novo plugin
+│   ├── _template/              ← copy this to create a new plugin
 │   │   ├── .claude-plugin/
 │   │   │   └── plugin.json
 │   │   └── skills/
 │   │       └── my-skill/
 │   │           └── SKILL.md
-│   └── latex/                  ← plugin de exemplo (LaTeX)
+│   └── latex/                  ← example plugin (LaTeX)
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       └── skills/
@@ -31,28 +31,28 @@ willz-skills/
 
 ---
 
-## Como usar (instalação)
+## How to use (installation)
 
-### 1. Adicionar o marketplace ao Claude Code
+### 1. Add the marketplace to Claude Code
 
 ```bash
 /plugin marketplace add willzwayn/skills
 ```
 
-### 2. Instalar um plugin específico
+### 2. Install a specific plugin
 
 ```bash
 /plugin install latex@willzwayn-skills
 ```
 
-### 3. Invocar uma skill
+### 3. Invoke a skill
 
 ```bash
 /latex:cv
 /latex:presentation
 ```
 
-### 4. Atualizar plugins
+### 4. Update plugins
 
 ```bash
 /plugin update latex@willzwayn-skills
@@ -60,83 +60,83 @@ willz-skills/
 
 ---
 
-## Como criar um novo plugin (passo a passo)
+## How to create a new plugin (step by step)
 
-### Passo 1 — Copie o template
+### Step 1 — Copy the template
 
 ```bash
-cp -r plugins/_template plugins/meu-novo-plugin
+cp -r plugins/_template plugins/my-new-plugin
 ```
 
-### Passo 2 — Edite o `plugin.json`
+### Step 2 — Edit the `plugin.json`
 
-Abra `plugins/meu-novo-plugin/.claude-plugin/plugin.json` e preencha:
-- `name`: identificador único (kebab-case, ex: `latex`, `python-tools`)
-- `description`: o que o plugin faz
-- `version`: comece em `"1.0.0"`
+Open `plugins/my-new-plugin/.claude-plugin/plugin.json` and fill in:
+- `name`: unique identifier (kebab-case, e.g.: `latex`, `python-tools`)
+- `description`: what the plugin does
+- `version`: start at `"1.0.0"`
 
-### Passo 3 — Crie as skills
+### Step 3 — Create the skills
 
-Dentro de `plugins/meu-novo-plugin/skills/`, cada pasta vira uma skill:
+Inside `plugins/my-new-plugin/skills/`, each folder becomes a skill:
 
 ```
 skills/
-└── minha-skill/          ← nome do /slash-command
-    ├── SKILL.md          ← obrigatório
-    ├── examples.md       ← opcional: exemplos de uso
-    ├── reference.md      ← opcional: docs detalhadas
-    └── templates/        ← opcional: arquivos de template
+└── my-skill/             ← name of the /slash-command
+    ├── SKILL.md          ← required
+    ├── examples.md       ← optional: usage examples
+    ├── reference.md      ← optional: detailed docs
+    └── templates/        ← optional: template files
         └── template.txt
 ```
 
-### Passo 4 — Escreva o `SKILL.md`
+### Step 4 — Write the `SKILL.md`
 
-Veja o template em `plugins/_template/skills/my-skill/SKILL.md`.
+See the template at `plugins/_template/skills/my-skill/SKILL.md`.
 
-Regras importantes:
-- `description` é o campo mais crítico — o Claude usa ele para decidir quando invocar a skill automaticamente
-- Seja específico: mencione casos de uso reais e palavras-chave que o usuário usaria
-- Mantenha o `SKILL.md` abaixo de 500 linhas; mova docs detalhadas para `reference.md`
+Important rules:
+- `description` is the most critical field — Claude uses it to decide when to automatically invoke the skill
+- Be specific: mention real use cases and keywords the user would use
+- Keep `SKILL.md` under 500 lines; move detailed docs to `reference.md`
 
-### Passo 5 — Registre no marketplace
+### Step 5 — Register in the marketplace
 
-Abra `.claude-plugin/marketplace.json` e adicione uma entrada no array `plugins`:
+Open `.claude-plugin/marketplace.json` and add an entry to the `plugins` array:
 
 ```json
 {
-  "source": "plugins/meu-novo-plugin",
-  "description": "Descrição curta do plugin",
+  "source": "plugins/my-new-plugin",
+  "description": "Short plugin description",
   "category": "development"
 }
 ```
 
-### Passo 6 — Teste localmente
+### Step 6 — Test locally
 
 ```bash
-claude --plugin-dir ./plugins/meu-novo-plugin
+claude --plugin-dir ./plugins/my-new-plugin
 ```
 
-Dentro do Claude Code:
+Inside Claude Code:
 ```bash
-/meu-novo-plugin:minha-skill
+/my-new-plugin:my-skill
 ```
 
-### Passo 7 — Commit e push
+### Step 7 — Commit and push
 
 ```bash
 git add .
-git commit -m "feat: add meu-novo-plugin"
+git commit -m "feat: add my-new-plugin"
 git push
 ```
 
-Pronto. Qualquer pessoa pode instalar com `/plugin marketplace add willzwayn/skills`.
+Done. Anyone can install with `/plugin marketplace add willzwayn/skills`.
 
 ---
 
-## Referências
+## References
 
-- [Documentação oficial de Skills](https://code.claude.com/docs/en/skills)
-- [Documentação de Plugins](https://code.claude.com/docs/en/plugins)
-- [Criar Marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
-- [Padrão aberto agentskills.io](https://agentskills.io)
-- [anthropics/skills (repositório oficial)](https://github.com/anthropics/skills)
+- [Official Skills Documentation](https://code.claude.com/docs/en/skills)
+- [Plugins Documentation](https://code.claude.com/docs/en/plugins)
+- [Creating Marketplaces](https://code.claude.com/docs/en/plugin-marketplaces)
+- [agentskills.io open standard](https://agentskills.io)
+- [anthropics/skills (official repository)](https://github.com/anthropics/skills)

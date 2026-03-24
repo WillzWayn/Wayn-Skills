@@ -1,6 +1,6 @@
 {
   "name": "willzwayn-skills",
-  "description": "Marketplace pessoal de Claude Code Skills por willzwayn",
+  "description": "Personal Claude Code Skills marketplace by willzwayn",
   "owner": {
     "name": "willzwayn",
     "url": "https://github.com/willzwayn"
@@ -8,7 +8,7 @@
   "plugins": [
     {
       "source": "plugins/latex",
-      "description": "Skills para criar documentos LaTeX: CV, apresentações, artigos",
+      "description": "Skills for creating LaTeX documents: CVs, presentations, articles",
       "category": "document",
       "tags": ["latex", "pdf", "document", "cv", "presentation"]
     }

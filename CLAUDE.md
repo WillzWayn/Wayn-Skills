@@ -2,150 +2,150 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## O que é este repositório
+## What is this repository
 
-Biblioteca pessoal de Claude Code Skills de willzwayn, publicada como marketplace em `github.com/willzwayn/skills`. Funciona simultaneamente como:
+Personal Claude Code Skills library by willzwayn, published as a marketplace at `github.com/willzwayn/skills`. It works simultaneously as:
 
-- **Claude Code Plugin Marketplace** — instalável via `/plugin marketplace add willzwayn/skills`
-- **skills.sh directory** — instalável via `npx skills add willzwayn/skills`
+- **Claude Code Plugin Marketplace** — installable via `/plugin marketplace add willzwayn/skills`
+- **skills.sh directory** — installable via `npx skills add willzwayn/skills`
 
-O formato `SKILL.md` segue o padrão aberto [agentskills.io](https://agentskills.io), compatível com Claude Code, Cursor, Gemini CLI, OpenAI Codex CLI e outros agentes.
+The `SKILL.md` format follows the open standard [agentskills.io](https://agentskills.io), compatible with Claude Code, Cursor, Gemini CLI, OpenAI Codex CLI, and other agents.
 
 ---
 
-## Estrutura e convenções
+## Structure and conventions
 
 ```
 willz-skills/
 ├── .claude-plugin/
-│   └── marketplace.json        ← índice global de todos os plugins
+│   └── marketplace.json        ← global index of all plugins
 ├── plugins/
-│   ├── _template/              ← template canônico para novos plugins
-│   └── <categoria>/            ← um plugin por categoria (ex: latex, python-tools)
+│   ├── _template/              ← canonical template for new plugins
+│   └── <category>/             ← one plugin per category (e.g.: latex, python-tools)
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       └── skills/
-│           └── <nome-skill>/   ← uma pasta por skill
-│               ├── SKILL.md    ← obrigatório
-│               ├── examples.md ← opcional
-│               ├── reference.md← opcional (docs longas vão aqui, não no SKILL.md)
-│               └── templates/  ← opcional (arquivos usados pela skill)
+│           └── <skill-name>/   ← one folder per skill
+│               ├── SKILL.md    ← required
+│               ├── examples.md ← optional
+│               ├── reference.md← optional (long docs go here, not in SKILL.md)
+│               └── templates/  ← optional (files used by the skill)
 ```
 
-**Regra de nomes**: tudo em `kebab-case`. O nome da pasta da skill vira o `/slash-command` dentro do namespace do plugin: `/<plugin>:<skill>`.
+**Naming rule**: everything in `kebab-case`. The skill folder name becomes the `/slash-command` within the plugin namespace: `/<plugin>:<skill>`.
 
 ---
 
-## Como adicionar uma nova skill
+## How to add a new skill
 
-### 1. Novo plugin (nova categoria)
+### 1. New plugin (new category)
 
 ```bash
-cp -r plugins/_template plugins/<nova-categoria>
+cp -r plugins/_template plugins/<new-category>
 ```
 
-Edite `plugins/<nova-categoria>/.claude-plugin/plugin.json`:
-- `name`: kebab-case, vira o namespace (`/nome:skill`)
-- `description`: o que o plugin oferece
-- `version`: semver, começa em `"1.0.0"`
+Edit `plugins/<new-category>/.claude-plugin/plugin.json`:
+- `name`: kebab-case, becomes the namespace (`/name:skill`)
+- `description`: what the plugin offers
+- `version`: semver, starts at `"1.0.0"`
 
-Registre em `.claude-plugin/marketplace.json` adicionando ao array `plugins`:
+Register in `.claude-plugin/marketplace.json` by adding to the `plugins` array:
 ```json
 {
-  "source": "plugins/<nova-categoria>",
-  "description": "Descrição curta",
-  "category": "<categoria>",
+  "source": "plugins/<new-category>",
+  "description": "Short description",
+  "category": "<category>",
   "tags": ["tag1", "tag2"]
 }
 ```
 
-### 2. Nova skill dentro de plugin existente
+### 2. New skill within an existing plugin
 
 ```bash
-mkdir -p plugins/<categoria>/skills/<nome-skill>
+mkdir -p plugins/<category>/skills/<skill-name>
 ```
 
-Crie `SKILL.md` baseado em `plugins/_template/skills/my-skill/SKILL.md`.
+Create `SKILL.md` based on `plugins/_template/skills/my-skill/SKILL.md`.
 
 ---
 
-## Anatomia do SKILL.md
+## SKILL.md anatomy
 
 ```yaml
 ---
-name: nome-da-skill           # opcional: se omitido, usa o nome da pasta
-description: >                # CRÍTICO — Claude usa isto para auto-invocar
-  O que a skill faz e quando usar. Seja específico, mencione palavras-chave
-  que o usuário usaria naturalmente.
-disable-model-invocation: false  # true = só o usuário pode invocar (/nome)
-allowed-tools: Read, Write       # opcional: ferramentas sem confirmação
-context: fork                    # opcional: roda em subagente isolado
-agent: Explore                   # opcional: tipo do subagente (com context: fork)
+name: skill-name              # optional: if omitted, uses the folder name
+description: >                # CRITICAL — Claude uses this to auto-invoke
+  What the skill does and when to use it. Be specific, mention keywords
+  the user would naturally use.
+disable-model-invocation: false  # true = only the user can invoke (/name)
+allowed-tools: Read, Write       # optional: tools without confirmation
+context: fork                    # optional: runs in an isolated subagent
+agent: Explore                   # optional: subagent type (with context: fork)
 ---
 ```
 
-**Regras de qualidade:**
-- `description` é o campo mais importante — sem ele, a skill nunca será invocada automaticamente
-- Mantenha `SKILL.md` abaixo de 500 linhas — mova docs longas para `reference.md`
-- Use `disable-model-invocation: true` para skills com efeitos colaterais (deploy, email, etc.)
-- Referencie arquivos de suporte explicitamente no corpo: `veja [reference.md](reference.md)`
-- Argumentos do usuário ficam disponíveis via `$ARGUMENTS`, `$0`, `$1`, etc.
+**Quality rules:**
+- `description` is the most important field — without it, the skill will never be auto-invoked
+- Keep `SKILL.md` under 500 lines — move long docs to `reference.md`
+- Use `disable-model-invocation: true` for skills with side effects (deploy, email, etc.)
+- Reference support files explicitly in the body: `see [reference.md](reference.md)`
+- User arguments are available via `$ARGUMENTS`, `$0`, `$1`, etc.
 
 ---
 
-## Testar localmente antes de publicar
+## Test locally before publishing
 
 ```bash
-# Testar um plugin isolado
-claude --plugin-dir ./plugins/<nome-plugin>
+# Test an isolated plugin
+claude --plugin-dir ./plugins/<plugin-name>
 
-# Verificar quais skills o skills.sh detecta
+# Check which skills skills.sh detects
 npx skills add . --list
 
-# Dentro do Claude Code, recarregar após edições
+# Inside Claude Code, reload after edits
 /reload-plugins
 ```
 
 ---
 
-## Publicar
+## Publish
 
 ```bash
 git add .
-git commit -m "feat(<categoria>): add <nome-skill>"
+git commit -m "feat(<category>): add <skill-name>"
 git push
 ```
 
-Após o push, disponível para instalação:
+After pushing, available for installation:
 ```bash
 # Claude Code
 /plugin marketplace add willzwayn/skills
-/plugin install <categoria>@willzwayn-skills
+/plugin install <category>@willzwayn-skills
 
-# skills.sh / qualquer agente compatível
+# skills.sh / any compatible agent
 npx skills add willzwayn/skills
 ```
 
 ---
 
-## Categorias existentes
+## Existing categories
 
-| Plugin | Skills | Descrição |
-|--------|--------|-----------|
-| `latex` | `cv`, `presentation` | Documentos LaTeX profissionais |
+| Plugin | Skills | Description |
+|--------|--------|-------------|
+| `latex` | `cv`, `presentation` | Professional LaTeX documents |
 
 ---
 
-## Frontmatter de referência rápida
+## Quick reference frontmatter
 
-| Campo | Obrigatório | Efeito |
-|-------|-------------|--------|
-| `name` | não | display name e slash-command (padrão: nome da pasta) |
-| `description` | recomendado | Claude usa para auto-invocar |
-| `disable-model-invocation` | não | `true` = só usuário invoca |
-| `user-invocable` | não | `false` = só Claude invoca (background knowledge) |
-| `allowed-tools` | não | ferramentas sem confirmação quando a skill está ativa |
-| `model` | não | modelo específico para esta skill |
-| `effort` | não | `low/medium/high/max` |
-| `context` | não | `fork` = roda em subagente isolado |
-| `agent` | não | tipo do subagente (`Explore`, `Plan`, `general-purpose`) |
+| Field | Required | Effect |
+|-------|----------|--------|
+| `name` | no | display name and slash-command (default: folder name) |
+| `description` | recommended | Claude uses this to auto-invoke |
+| `disable-model-invocation` | no | `true` = only user invokes |
+| `user-invocable` | no | `false` = only Claude invokes (background knowledge) |
+| `allowed-tools` | no | tools without confirmation when skill is active |
+| `model` | no | specific model for this skill |
+| `effort` | no | `low/medium/high/max` |
+| `context` | no | `fork` = runs in isolated subagent |
+| `agent` | no | subagent type (`Explore`, `Plan`, `general-purpose`) |

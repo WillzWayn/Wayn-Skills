@@ -1,42 +1,42 @@
 ---
-# OBRIGATÓRIO (recomendado): Claude usa isto para decidir quando invocar a skill.
-# Seja específico: inclua casos de uso reais e palavras que o usuário usaria.
+# REQUIRED (recommended): Claude uses this to decide when to invoke the skill.
+# Be specific: include real use cases and words the user would use.
 description: >
-  Descreva o que a skill faz e quando usá-la.
-  Exemplo: "Cria um relatório em PDF. Use quando o usuário pedir para gerar
-  um relatório, sumário executivo, ou documento formal."
+  Describe what the skill does and when to use it.
+  Example: "Creates a PDF report. Use when the user asks to generate
+  a report, executive summary, or formal document."
 
-# OPCIONAL: impede o Claude de invocar automaticamente.
-# Use true para skills com efeitos colaterais (deploy, envio de email, etc.)
+# OPTIONAL: prevents Claude from invoking automatically.
+# Use true for skills with side effects (deploy, sending email, etc.)
 disable-model-invocation: false
 
-# OPCIONAL: ferramentas que a skill pode usar sem pedir permissão.
+# OPTIONAL: tools the skill can use without asking permission.
 # allowed-tools: Bash(pdflatex *), Read, Write
 
-# OPCIONAL: roda em subagente isolado (não acessa histórico da conversa).
+# OPTIONAL: runs in an isolated subagent (no access to conversation history).
 # context: fork
 # agent: Explore
 ---
 
-# Nome da Skill
+# Skill Name
 
-Breve descrição do que esta skill faz.
+Brief description of what this skill does.
 
-## Como usar
+## How to use
 
-Invoque com `/plugin-name:my-skill [argumentos]`
+Invoke with `/plugin-name:my-skill [arguments]`
 
-O argumento passado fica disponível em `$ARGUMENTS`.
+The argument passed is available in `$ARGUMENTS`.
 
-## Instruções
+## Instructions
 
-Escreva aqui as instruções passo a passo que o Claude deve seguir.
+Write step-by-step instructions for Claude to follow here.
 
-1. Passo 1
-2. Passo 2
-3. Passo 3
+1. Step 1
+2. Step 2
+3. Step 3
 
-## Recursos adicionais
+## Additional resources
 
-- Para detalhes de API, veja [reference.md](reference.md)  ← crie se necessário
-- Para exemplos, veja [examples.md](examples.md)           ← crie se necessário
+- For API details, see [reference.md](reference.md)  ← create if needed
+- For examples, see [examples.md](examples.md)        ← create if needed
