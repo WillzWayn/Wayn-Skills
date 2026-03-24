@@ -1,0 +1,10 @@
+{
+  "name": "latex",
+  "description": "Skills para criar documentos LaTeX profissionais: CV, apresentações, relatórios acadêmicos, e gerenciamento de referências BibTeX",
+  "version": "1.0.0",
+  "author": {
+    "name": "willzwayn",
+    "url": "https://github.com/willzwayn"
+  },
+  "license": "MIT"
+}
