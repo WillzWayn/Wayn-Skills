@@ -1,5 +1,6 @@
 ---
 name: my-academic-writing
+allowed-tools: Bash, Write
 description: >
   Replicate William Wayn's personal academic writing style — a conversational-didactic
   voice that teaches through everyday analogies, builds arguments brick by brick, and
@@ -343,20 +344,115 @@ academic AI output would produce:
 
 ---
 
-## 7. How to Apply This
+## 7. Deterministic Validation Script
 
-When the user asks you to write academic content:
+A companion script `check_ai_tells.py` (in this skill's folder) performs rule-based
+detection of AI-tell patterns before publishing. It is language-agnostic and runs
+entirely offline — no model, no API.
 
-1. Ask what the topic, audience, and purpose are (if not clear from context)
-2. Ask what language to write in (Portuguese BR or English), unless obvious
-3. Write in William's voice following all the patterns above
-4. Structure arguments as building blocks, each motivated by the previous
-5. Include at least one concrete analogy for every abstract concept introduced
-6. Be honest about scope, limitations, and simplifications
-7. Close sections by connecting results back to the broader question
-8. After writing, re-read and purge any AI writing patterns from Section 4
-9. Verify the text has *soul* — opinions, humor, direct reader address, conditional
-   mood thinking-out-loud — not just clean, correct prose
+```bash
+# Check a text file
+python3 check_ai_tells.py mytext.txt
+
+# Pipe from stdin
+pbpaste | python3 check_ai_tells.py -
+
+# Fail with exit code 1 if any finding (useful as a pre-commit hook or CI step)
+python3 check_ai_tells.py mytext.txt --strict
+
+# Show only errors (ignore warnings and info)
+python3 check_ai_tells.py mytext.txt --only error
+```
+
+**What it checks:**
+
+| Rule ID | Severity | What it catches |
+|---------|----------|-----------------|
+| `EM_DASH` | warning | Each individual em dash (—) |
+| `EM_DASH_DENSITY` | error | More than 3 em dashes per ~500-word page |
+| `AI_VOCAB` | error | delve, foster, tapestry, pivotal, interplay, intricate, etc. |
+| `SERVES_AS` | error | "serves as", "stands as" instead of "is" |
+| `SIGNIFICANCE_CLAIM` | error | crucial, vital, testament to |
+| `PROMOTIONAL_ADJ` | warning | groundbreaking, cutting-edge, remarkable |
+| `SUPERFICIAL_ING` | warning | "highlighting the importance of..." |
+| `NEG_PARALLELISM` | warning | "Not only...but also..." |
+| `FILLER_PHRASE` | error | "It is important to note that", "In order to" |
+| `EXCESSIVE_HEDGE` | warning | "could potentially", "may possibly" |
+| `GENERIC_CONCLUSION` | error | "The future looks bright", "opens new doors" |
+| `SYNONYM_CYCLING` | warning | 3+ synonyms for the same concept (electron/particle/charge carrier) |
+| `PASSIVE_VOICE` | info | Passive constructions (informational only) |
+
+**Note on false positives:** the script flags the words wherever they appear,
+including inside quotations or rule descriptions (like in SKILL.md itself).
+Context is yours to judge — the script's job is to surface candidates, not to decide.
+
+---
+
+## 8. How to Apply This — Auto-Reflection Loop
+
+When the user asks you to write academic content, follow this exact loop:
+
+### Step 1 — Clarify (if needed)
+Ask what the topic, audience, and purpose are if not clear from context.
+Ask what language to write in (Portuguese BR or English), unless obvious.
+Do not ask more than two questions at once.
+
+### Step 2 — Draft
+Write the full text in William's voice following all the patterns above:
+- Structure arguments as building blocks, each motivated by the previous
+- Include at least one concrete analogy for every abstract concept
+- Be honest about scope, limitations, and simplifications
+- Close sections by connecting results back to the broader question
+
+### Step 3 — Validate (deterministic)
+Save the draft to a temp file and run the checker:
+
+```bash
+SKILL_DIR="$(dirname "$(realpath "$0" 2>/dev/null || echo "skills/my-academic-writing")")"
+CHECKER="$SKILL_DIR/check_ai_tells.py"
+TMPFILE=$(mktemp /tmp/wayn_draft_XXXX.txt)
+# (write draft content to $TMPFILE via Write tool, then:)
+python3 "$CHECKER" "$TMPFILE" --no-color --only error
+```
+
+In practice:
+1. Use the Write tool to save the draft to `/tmp/wayn_draft.txt`
+2. Run: `python3 skills/my-academic-writing/check_ai_tells.py /tmp/wayn_draft.txt --no-color`
+3. Read the output
+
+### Step 4 — Reflect and Revise
+For each **error** finding:
+- Identify the offending word, phrase, or character in your draft
+- Apply the fix described in the rule message (simpler word, direct verb, cut filler)
+- Do NOT just swap one AI word for another — think from William's voice
+
+For each **warning** finding:
+- Evaluate in context: is this a genuine AI pattern or a legitimate usage?
+- If genuine AI pattern, revise; if legitimate, leave and note why
+
+**Ignore `info`-level findings** unless the passive voice density is very high.
+
+### Step 5 — Re-validate
+After revisions, run the checker again on the updated text.
+Repeat Steps 4–5 until:
+- Zero errors remain, OR
+- You have completed 3 full revision passes (stop and deliver with a note on remaining issues)
+
+### Step 6 — Soul check (qualitative)
+Before delivering, verify the text has *soul*:
+- [ ] At least one direct reader address ("podemos imaginar", "espero que o leitor")
+- [ ] At least one honest limitation or scope admission
+- [ ] At least one concrete, developed analogy (if text > 200 words)
+- [ ] The "I" appears at most once per page, and only for genuine personal opinion
+- [ ] No sentence ends with "highlighting the importance of" or similar
+- [ ] The conclusion names specific results — not generic optimism
+
+### Step 7 — Deliver
+Show the final text to the user. If any warnings remain after 3 passes, briefly
+list them so the user can make the final call. Do not show internal checker output
+to the user — only the final text and a one-line summary of the validation result.
+
+---
 
 The user may provide an outline, a rough draft, or just a topic. In all cases, the output
 should sound like William wrote it — engaged, honest, pedagogical, and unmistakably human.
